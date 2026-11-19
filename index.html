@@ -1,0 +1,592 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>C-Robotics × 天机 合作交流</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"><style>
+:root {
+  --ink: #17231f; --muted: #5f6d68; --line: #d5ddd9; --bg: #ffffff; --wash: #f6f8f7;
+  --brand: #1f6f5c; --brand-mid: #8fc3b3; --brand-pale: #e6efeb;
+  --info: #2563a8; --info-pale: #e8eff8;
+  --data: #6b4fb3; --data-pale: #efeafa;
+  --amber: #b7791f; --amber-pale: #fbf1dc;
+  --cust: #f6f1e7; --cust-line: #e2d7c0;
+  --serif: Georgia, "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img, video { display: block; max-width: 100%; }
+a { color: var(--brand); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+p { margin: 0 0 .9em; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 40px; }
+.board { padding: 84px 0 88px; border-top: 1px solid var(--line); }
+.board.wash { background: var(--wash); }
+.kicker { font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--brand); margin: 0 0 10px; }
+h1, h2, h3 { margin: 0; }
+h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.4vw, 42px); line-height: 1.12; letter-spacing: -.005em; max-width: 24ch; }
+.sub { font-size: 18px; color: var(--muted); margin: 14px 0 0; max-width: 70ch; line-height: 1.5; }
+.sub b { color: var(--ink); font-weight: 600; }
+.head { margin-bottom: 36px; }
+h3 { font-size: 17px; font-weight: 700; line-height: 1.25; }
+.h3s { font-family: var(--serif); font-weight: 400; font-size: 25px; line-height: 1.2; margin-bottom: 14px; }
+.lab { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.note { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* top bar */
+.bar { position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: center; gap: 26px; height: 54px; }
+.brand { font-weight: 800; color: var(--brand); text-decoration: none; font-size: 17px; white-space: nowrap; }
+.bar nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-left: auto; }
+.bar nav a { color: var(--muted); text-decoration: none; font-size: 13.5px; padding: 6px 11px; border-radius: 6px; white-space: nowrap; }
+.bar nav a:hover, .bar nav a.on { color: var(--brand); background: var(--brand-pale); }
+
+/* media tile with caption strip */
+.tile { position: relative; border-radius: 10px; overflow: hidden; background: #1b2623; margin: 0; }
+.tile > img, .tile > video { width: 100%; height: 100%; object-fit: cover; }
+.tile figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 14px 10px; font-size: 12.5px; line-height: 1.35; color: #fff; background: linear-gradient(transparent, rgba(12,20,18,.82)); pointer-events: none; }
+.tile figcaption b { font-weight: 700; }
+.tile.vid figcaption { position: static; background: #1b2623; padding: 9px 14px 11px; }
+.pin { position: absolute; display: flex; align-items: center; gap: 7px; background: var(--amber); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 10px 5px 8px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+.pin::after { content: ""; position: absolute; left: 16px; top: 100%; border: 7px solid transparent; border-top-color: var(--amber); border-bottom: 0; }
+
+/* hero */
+.hero { padding: 54px 0 0; }
+.hero-g { display: grid; grid-template-columns: 6fr 7fr; gap: 44px; align-items: center; }
+.hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 3.5vw, 46px); line-height: 1.1; letter-spacing: -.01em; }
+.hero .lede { font-size: 18px; line-height: 1.5; margin: 22px 0 26px; color: #34413d; }
+.cta { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; text-decoration: none; padding: 10px 16px; border-radius: 7px; border: 1.5px solid var(--brand); color: var(--brand); }
+.btn.solid { background: var(--brand); color: #fff; }
+.btn:hover { background: var(--brand); color: #fff; }
+.btn.solid:hover { background: #185a4b; }
+.hero .tile video { aspect-ratio: 1280/637; height: auto; }
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 44px 0 64px; }
+.fact { border-top: 3px solid var(--brand); background: var(--wash); padding: 14px 18px 16px; }
+.fact b { display: block; font-family: var(--serif); font-weight: 400; font-size: 32px; color: var(--brand); line-height: 1.15; white-space: nowrap; }
+.fact span { font-size: 13.5px; color: #3d4a46; line-height: 1.35; display: block; margin-top: 4px; }
+
+/* record case */
+.case { display: grid; grid-template-columns: 1.45fr 1fr; gap: 22px; align-items: stretch; }
+.panel { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; }
+.chart-top { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 6px; }
+.chart-top .ttl { font-weight: 700; font-size: 15px; }
+.lg { display: flex; gap: 16px; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
+.lg i { display: inline-block; vertical-align: middle; margin-right: 6px; }
+.lg .ln { width: 20px; height: 0; border-top: 2.5px solid var(--brand); }
+.lg .sh { width: 16px; height: 11px; background: #d9d2ee; border-radius: 2px; }
+.lg .pl { width: 16px; height: 5px; background: var(--data); border-radius: 1px; }
+#chart { width: 100%; height: auto; display: block; }
+#chart .seg { cursor: pointer; }
+.pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.pick button { all: unset; cursor: pointer; display: flex; gap: 12px; align-items: center; border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 14px; background: #fff; }
+.pick button .k { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; background: var(--data-pale); color: var(--data); flex: none; }
+.pick button b { display: block; font-size: 14.5px; }
+.pick button span { font-size: 12.5px; color: var(--muted); }
+.pick button[aria-pressed="true"] { border-color: var(--data); background: var(--data-pale); }
+.pick button[aria-pressed="true"] .k { background: var(--data); color: #fff; }
+.det { display: flex; flex-direction: column; }
+.det-top { display: grid; grid-template-columns: 168px 1fr; gap: 16px; align-items: start; }
+.det video { width: 168px; height: 168px; border-radius: 8px; background: #1b2623; }
+.det h3 { font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.2; }
+.nums { display: flex; gap: 18px; margin: 12px 0 0; flex-wrap: wrap; }
+.nums div b { display: block; font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.1; color: var(--ink); white-space: nowrap; }
+.nums div span { font-size: 12px; color: var(--muted); }
+.verdict { margin-top: 16px; display: flex; gap: 10px; align-items: center; font-weight: 700; font-size: 15px; border-radius: 9px; padding: 11px 14px; }
+.verdict.keep { background: var(--brand-pale); color: var(--brand); }
+.verdict.drop { background: var(--amber-pale); color: #8a5a10; }
+.verdict .ti { font-size: 20px; }
+.det p.why { margin: 14px 0 0; font-size: 14.5px; color: #34413d; }
+.det p.cav { margin: auto 0 0; padding-top: 14px; font-size: 12.5px; color: var(--muted); }
+.take { margin-top: 22px; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; background: var(--brand); color: #fff; border-radius: 12px; padding: 18px 24px; }
+.take .ti { font-size: 28px; opacity: .85; }
+.take p { margin: 0; font-size: 17px; line-height: 1.45; max-width: 86ch; }
+
+/* stack map */
+.lane { display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: center; padding: 16px 0; border-top: 1px solid var(--line); }
+.lane:first-of-type { border-top: 0; }
+.lane-t b { display: block; font-family: var(--serif); font-weight: 400; font-size: 21px; line-height: 1.2; }
+.lane-t a { font-size: 12.5px; color: var(--muted); }
+.flow { display: flex; align-items: stretch; }
+.nd { flex: 1 1 0; min-width: 0; border-radius: 9px; padding: 10px 12px; font-size: 12.5px; line-height: 1.35; display: flex; gap: 9px; align-items: flex-start; border: 1px solid transparent; }
+.nd .ti { font-size: 20px; flex: none; }
+.nd b { display: block; font-size: 14px; line-height: 1.25; margin-bottom: 1px; }
+.nd span { color: #3d4a46; }
+.nd.cust { background: var(--cust); border-color: var(--cust-line); } .nd.cust .ti { color: #8a6d2f; }
+.nd.remote { background: var(--info-pale); } .nd.remote .ti { color: var(--info); }
+.nd.robot { background: var(--brand-pale); } .nd.robot .ti { color: var(--brand); }
+.nd.data { background: var(--data-pale); } .nd.data .ti { color: var(--data); }
+.nd.you { background: #fff; border: 1.5px dashed var(--amber); } .nd.you .ti { color: var(--amber); }
+.ar { flex: none; width: 26px; display: flex; align-items: center; justify-content: center; color: #9aa6a2; font-size: 17px; }
+.stk { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.backs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.backs span { font-size: 12px; color: var(--info); background: var(--info-pale); border-radius: 20px; padding: 3px 11px; display: inline-flex; gap: 6px; align-items: center; }
+.legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; vertical-align: -1px; margin-right: 6px; }
+
+/* site */
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.duo .tile { aspect-ratio: 16/9; }
+.stations { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; margin-top: 22px; }
+.stn { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 10px 12px; text-align: center; }
+.stn:not(:last-child)::after { content: "\ea1f"; font-family: "tabler-icons"; position: absolute; right: -20px; top: 50%; transform: translateY(-50%); font-size: 17px; color: #9aa6a2; }
+.stn .ti { font-size: 28px; color: var(--brand); }
+.stn b { display: block; font-size: 14.5px; margin-top: 4px; }
+.stn span { font-size: 12.5px; color: var(--muted); }
+.stn.luna { border: 2px solid var(--brand); background: var(--brand-pale); }
+.dispatch { margin-top: 12px; border: 1.5px solid var(--brand); border-radius: 10px; padding: 10px 16px; display: flex; gap: 12px; align-items: center; font-size: 14px; background: #f3f8f6; flex-wrap: wrap; }
+.dispatch b { color: var(--brand); }
+.dispatch .sys { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; background: var(--cust); border: 1px solid var(--cust-line); border-radius: 20px; padding: 3px 11px; }
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--brand); }
+.decision { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; }
+.decision p { font-size: 15px !important; }
+.decision p { font-size: 16px; margin: 0; }
+.chevs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 6px; }
+.chev { color: #fff; padding: 14px 26px 16px 34px; min-height: 96px; clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%); margin-left: -8px; }
+.chev:first-child { clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%); padding-left: 18px; margin-left: 0; }
+.chev .n { font-size: 11px; font-weight: 700; letter-spacing: .1em; opacity: .8; display: flex; gap: 6px; align-items: center; }
+.chev .n .ti { font-size: 17px; }
+.chev .t { font-size: 15.5px; font-weight: 700; line-height: 1.2; margin-top: 5px; }
+.c1 { background: #1f6f5c; } .c2 { background: #2f7d6a; } .c3 { background: #44907d; } .c4 { background: #5fa391; } .c5 { background: #7db6a6; }
+.chevd { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 14px; }
+.chevd ul { margin: 0; padding: 0 0 0 16px; font-size: 13.5px; line-height: 1.45; color: #34413d; }
+.chevd li + li { margin-top: 5px; }
+details.more { margin-top: 26px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+details.more summary { cursor: pointer; list-style: none; padding: 15px 20px; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary .ti { color: var(--brand); font-size: 20px; }
+details.more summary::after { content: "\ea5f"; font-family: "tabler-icons"; margin-left: auto; color: var(--muted); font-size: 18px; transition: transform .2s; }
+details.more[open] summary::after { transform: rotate(180deg); }
+details.more .in { padding: 4px 20px 22px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; }
+.netbox { padding: 22px 24px; } .netbox .in { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: start; }
+.rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.rule { background: var(--wash); border-radius: 9px; padding: 11px 13px; font-size: 13px; line-height: 1.4; }
+.rule b { display: block; font-size: 14px; margin-bottom: 2px; }
+.ticks { list-style: none; padding: 0; margin: 0; font-size: 14.5px; }
+.ticks li { padding-left: 22px; position: relative; margin: 7px 0; line-height: 1.45; }
+.ticks li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 8px; height: 8px; border-radius: 2px; background: var(--brand); }
+.target { margin-top: 26px; display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; background: var(--brand-pale); border-radius: 12px; padding: 16px 24px; }
+.target b.big { font-family: var(--serif); font-weight: 400; font-size: 46px; color: var(--brand); line-height: 1; }
+.target p { margin: 0; font-size: 15px; max-width: 80ch; }
+
+/* body map */
+.vs { display: grid; grid-template-columns: 150px 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.vs > div { padding: 14px 18px; border-top: 1px solid var(--line); font-size: 14.5px; line-height: 1.45; }
+.vs > div:nth-child(-n+3) { border-top: 0; }
+.vs .rk { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); background: var(--wash); display: flex; align-items: center; }
+.vs .ph { padding: 0; position: relative; }
+.vs .ph img { width: 100%; height: 190px; object-fit: cover; }
+.vs .ph span { position: absolute; left: 0; right: 0; bottom: 0; padding: 20px 16px 9px; color: #fff; font-weight: 700; font-size: 15px; background: linear-gradient(transparent, rgba(12,20,18,.8)); }
+.vs .col2 { border-left: 1px solid var(--line); }
+.vs .res { background: var(--brand-pale); display: flex; gap: 12px; align-items: center; }
+.vs .res img { width: 46px; height: 58px; object-fit: contain; flex: none; }
+.vs .res b { display: block; color: var(--brand); font-size: 15.5px; }
+.vs .res.rk { background: var(--brand); color: #fff; }
+.map4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; }
+.mcard { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 14px 16px; display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; }
+.mcard img { width: 44px; height: 56px; object-fit: contain; }
+.mcard b { display: block; font-size: 14.5px; }
+.mcard span { font-size: 12.5px; color: var(--muted); line-height: 1.35; display: block; }
+.mcard.on { border: 2px solid var(--brand); background: #f3f8f6; }
+
+/* generic grids */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.two.l { grid-template-columns: 1fr 1.25fr; } .two.r { grid-template-columns: 1.25fr 1fr; }
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.blk { margin-top: 52px; }
+.thesis { font-family: var(--serif); font-size: 23px; line-height: 1.38; color: var(--ink); margin: 0 0 16px; }
+.body p { font-size: 16.5px; color: #2c3935; }
+.body p.thesis { font-size: 23px; color: var(--ink); }
+.body p.lab { font-size: 11px; color: var(--muted); }
+.chain { display: flex; align-items: stretch; }
+.lk { flex: 1 1 0; min-width: 0; border-radius: 10px; padding: 13px 14px 12px; font-size: 13px; line-height: 1.4; }
+.lk .who { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; display: flex; gap: 6px; align-items: center; }
+.lk b { display: block; font-size: 15px; margin-bottom: 2px; }
+.lk.ven { background: #fff; border: 1px solid var(--line); } .lk.ven .who { color: var(--muted); }
+.lk.ours { background: var(--brand-pale); border: 1px solid #c4dcd2; } .lk.ours .who { color: var(--brand); }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.card .ti.ic { font-size: 26px; color: var(--brand); }
+.card h3 { margin: 8px 0 6px; }
+.card p { font-size: 14px; line-height: 1.5; margin: 0; color: #34413d; }
+.q { border: 1.5px dashed var(--amber); border-radius: 12px; background: #fffaf0; padding: 16px 20px; font-size: 15px; line-height: 1.5; }
+.q b.t { color: #8a5a10; }
+.ev { border-left: 3px solid var(--brand-mid); padding: 2px 0 2px 14px; margin-top: 12px; font-size: 13.5px; color: #34413d; line-height: 1.5; }
+
+.vf { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; margin: 14px 0 0; padding: 11px 14px; background: var(--data-pale); border-radius: 9px; font-size: 14px; line-height: 1.45; color: #2c2540; }
+.vf .ti { color: var(--data); font-size: 19px; margin-top: 1px; }
+.leanfig svg { width: 100%; height: auto; display: block; }
+.recs .card { display: flex; flex-direction: column; }
+.recs .card.next { background: #fffaf0; border: 1.5px dashed var(--amber); }
+.tagx { align-self: flex-start; font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 2px 9px; border-radius: 20px; }
+.tagx.done { background: var(--data-pale); color: var(--data); } .tagx.you { background: var(--amber-pale); color: #8a5a10; }
+.bign { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 8px 0 10px; }
+.bign b { display: block; font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.1; color: var(--data); }
+.bign span { font-size: 12.5px; color: var(--muted); line-height: 1.35; display: block; }
+.mini { margin: 6px 0 0; padding-left: 17px; font-size: 13.5px; line-height: 1.45; color: #34413d; } .mini li + li { margin-top: 3px; }
+.vs .res svg, .mcard svg { flex: none; }
+.zhint { display: none; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 6px; }
+#zoom { position: fixed; inset: 0; z-index: 100; background: rgba(12,20,18,.9); display: none; overflow: auto; padding: 56px 16px 24px; }
+#zoom.on { display: block; }
+#zoom .zin { background: #fff; border-radius: 10px; padding: 14px; min-width: 900px; }
+#zoom .zin svg { width: 100%; height: auto; display: block; }
+#zoom button { position: fixed; top: 12px; right: 14px; border: 0; border-radius: 20px; padding: 8px 16px; font-size: 14px; font-weight: 700; background: #fff; color: var(--ink); cursor: pointer; }
+/* touch */
+.devs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.devs .tile { aspect-ratio: 4/3; }
+.devs .draw { aspect-ratio: 4/3; border-radius: 10px; background: var(--brand-pale); display: flex; align-items: center; justify-content: center; }
+.devs .draw svg { width: 88%; height: auto; }
+.dcap { font-size: 13.5px; line-height: 1.45; color: #34413d; margin-top: 10px; }
+.dcap b { display: block; font-size: 15px; color: var(--ink); }
+.hyp { margin-top: 52px; background: #17231f; color: #e8efec; border-radius: 14px; padding: 34px 38px; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; }
+.hyp .num { font-family: var(--serif); font-size: clamp(58px, 7vw, 96px); color: var(--brand-mid); line-height: .95; white-space: nowrap; }
+.hyp .num small { display: block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #a9bcb5; margin-top: 12px; }
+.hyp p.lab { font-size: 11px; color: var(--brand-mid); max-width: none; }
+.hyp p:not(.lab) { font-size: 17px; line-height: 1.5; color: #dde7e3; max-width: 64ch; }
+.hyp p:last-child { margin: 0; }
+.hyp p b { color: #fff; }
+
+/* data */
+.hg svg { width: 100%; height: auto; display: block; }
+.props { display: flex; flex-direction: column; gap: 14px; }
+.prop { display: grid; grid-template-columns: 38px 1fr; gap: 14px; }
+.prop .ti { width: 38px; height: 38px; border-radius: 9px; background: var(--data-pale); color: var(--data); font-size: 21px; display: flex; align-items: center; justify-content: center; }
+.prop b { display: block; font-size: 16px; margin-bottom: 2px; }
+.prop p { margin: 0; font-size: 14.5px; color: #34413d; }
+.pipe { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+.pp { background: var(--data-pale); color: var(--ink); padding: 13px 24px 14px 32px; min-height: 104px; font-size: 12.5px; line-height: 1.4; clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%, 18px 50%); margin-left: -6px; }
+.pp:first-child { clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%); padding-left: 16px; margin-left: 0; }
+.pp:nth-child(even) { background: #e4dcf6; }
+.pp b { display: block; font-size: 14.5px; color: var(--data); margin-bottom: 3px; }
+.pp.out { background: var(--amber-pale); } .pp.out b { color: #8a5a10; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.4; }
+.tbl td:first-child { font-weight: 600; white-space: nowrap; }
+.tbl td .ti { color: var(--data); margin-right: 7px; font-size: 17px; vertical-align: -2px; }
+.tbl tr.add td:first-child .ti { color: var(--amber); }
+
+/* together */
+.steps3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.s3 { padding: 20px 34px 22px 42px; color: #fff; clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%); margin-left: -10px; min-height: 190px; }
+.s3:first-child { clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%); padding-left: 24px; margin-left: 0; }
+.s3 .n { font-family: var(--serif); font-size: 24px; line-height: 1.1; opacity: .8; }
+.s3 b { display: block; font-size: 19px; margin: 10px 0 6px; }
+.s3 p { margin: 0; font-size: 14px; line-height: 1.45; opacity: .95; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
+.col { border-radius: 12px; padding: 18px 22px; }
+.col.we { background: var(--brand-pale); } .col.you { background: #fffaf0; border: 1.5px dashed var(--amber); }
+.col h3 { display: flex; gap: 9px; align-items: center; margin-bottom: 8px; }
+.col h3 .ti { font-size: 22px; } .col.we h3 .ti { color: var(--brand); } .col.you h3 .ti { color: var(--amber); }
+.col ul { margin: 0; padding-left: 18px; font-size: 14.5px; line-height: 1.5; }
+.col li + li { margin-top: 4px; }
+.sup { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+.four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.close { margin-top: 56px; border-top: 3px solid var(--brand); padding-top: 26px; display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: end; }
+.close p { font-family: var(--serif); font-size: clamp(22px, 2.5vw, 29px); line-height: 1.34; max-width: 44ch; margin: 0; }
+.close .sig { font-size: 14px; color: var(--muted); text-align: right; }
+.close .sig b { display: block; color: var(--brand); font-size: 18px; }
+footer { border-top: 1px solid var(--line); padding: 22px 0 40px; font-size: 12.5px; color: var(--muted); }
+
+@media (max-width: 1000px) {
+  .hero-g, .case, .two, .two.l, .two.r, .duo, .decision, .bign, details.more .in, .netbox .in, .split, .hyp, .close { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr 1fr; }
+  .lane { grid-template-columns: 1fr; gap: 10px; }
+  .three, .devs, .sup, .map4, .four { grid-template-columns: 1fr 1fr; }
+  .chevs, .chevd { grid-template-columns: 1fr; }
+  .chevd { display: none; }
+  .chev, .chev:first-child { clip-path: none; margin: 0 0 6px; border-radius: 8px; min-height: 0; padding: 12px 16px; }
+  .pipe, .steps3 { grid-template-columns: 1fr; }
+  .pp, .pp:first-child, .s3, .s3:first-child { clip-path: none; margin: 0 0 6px; border-radius: 10px; min-height: 0; padding: 14px 18px; }
+  .stations { grid-template-columns: 1fr 1fr; gap: 10px; } .stn::after { display: none; }
+  .close .sig { text-align: left; }
+}
+@media (max-width: 640px) {
+  .wrap { padding: 0 18px; }
+  .board { padding: 56px 0 60px; }
+  .bar nav { display: none; }
+  .flow, .chain { flex-direction: column; } .ar { transform: rotate(90deg); height: 20px; width: auto; }
+  .three, .devs, .sup, .map4, .four, .rules, .pick { grid-template-columns: 1fr; }
+  .det-top { grid-template-columns: 110px 1fr; } .det video { width: 110px; height: 110px; }
+  .vs { grid-template-columns: 1fr; } .vs .rk { padding: 7px 14px; } .vs .col2 { border-left: 0; }
+  .vs > div:nth-child(-n+3) { border-top: 1px solid var(--line); } .vs > div:first-child { display: none; }
+  .vs > div:nth-child(3n+2):not(.ph)::before { content: "Restaurant. "; font-weight: 700; }
+  .vs > div:nth-child(3n):not(.ph)::before { content: "Retail. "; font-weight: 700; }
+  .vs .res { flex-wrap: wrap; }
+  .zoomable { cursor: zoom-in; } .zhint { display: flex; }
+  .take { grid-template-columns: 1fr; } .target { grid-template-columns: 1fr; gap: 8px; }
+  .fact b { white-space: normal; font-size: 26px; }
+}
+
+:root { --serif: Georgia, "Songti SC", "STSong", serif; }
+body { font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", sans-serif; }
+h2 { max-width: 30ch; letter-spacing: .01em; } .hero h1 { letter-spacing: .01em; line-height: 1.2; }
+.kicker, .lab { letter-spacing: .1em; }
+/* 循环小窗视频，点开放大 */
+.vt { position: relative; border-radius: 10px; overflow: hidden; background: #1b2623; cursor: zoom-in; margin: 0; }
+.vt video { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+.vt .zi { position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%; background: rgba(12,20,18,.6); color: #fff; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.vt figcaption { padding: 9px 12px 11px; font-size: 13px; line-height: 1.45; color: #fff; }
+.vt figcaption b { display: block; font-size: 14.5px; }
+.vrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.vrow.seq { grid-template-columns: 1fr 26px 1fr 26px 1fr; align-items: center; gap: 6px; }
+#lb { position: fixed; inset: 0; z-index: 100; background: rgba(12,20,18,.92); display: none; align-items: center; justify-content: center; padding: 56px 24px 24px; }
+#lb.on { display: flex; } #lb video { max-width: min(1280px, 100%); max-height: 100%; border-radius: 10px; background: #000; }
+#lb button { position: fixed; top: 12px; right: 14px; border: 0; border-radius: 20px; padding: 8px 16px; font-size: 14px; font-weight: 700; background: #fff; color: var(--ink); cursor: pointer; }
+/* 主端图与引出线 */
+.dev { position: relative; background: #12261f; border-radius: 12px; display: grid; grid-template-columns: 1fr 300px 1fr; align-items: stretch; overflow: hidden; }
+.dev .img { position: relative; } .dev .img img { width: 300px; height: auto; display: block; }
+.dev .side { position: relative; }
+.co { position: absolute; left: auto; right: 0; width: 300px; transform: translateY(-50%); border: 1px solid; border-radius: 8px 0 0 8px; border-right: 0; background: rgba(8,20,16,.72); padding: 8px 12px; color: #e8efec; font-size: 12.5px; line-height: 1.4; }
+.side.r .co { left: 0; right: auto; border-radius: 0 8px 8px 0; border-right: 1px solid; border-left: 0; }
+.co b { display: block; font-size: 14px; color: #fff; } .co i { font-style: normal; font-weight: 800; margin-right: 6px; }
+.co.y { border-color: #e3b963; } .co.y i { color: #e3b963; } .co.g { border-color: #5fd0a0; } .co.g i { color: #5fd0a0; } .co.o { border-color: #e8806a; } .co.o i { color: #e8806a; } .co.d { border-color: #e3b963; border-style: dashed; } .co.d i { color: #e3b963; } .co.c { border-color: #f0cf8a; } .co.c i { color: #f0cf8a; }
+.devcap { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #8fc3b3; position: absolute; left: 16px; top: 12px; z-index: 2; }
+.fbrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+.fbc { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; grid-template-columns: 44px 1fr; gap: 12px; }
+.fbc .ic { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.fbc b { display: block; font-size: 16px; } .fbc span { font-size: 13.5px; color: #34413d; line-height: 1.5; }
+.eq { display: grid; grid-template-columns: 1fr 34px 1fr 34px 1.15fr; align-items: stretch; gap: 8px; }
+.eq .op { display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 34px; color: var(--muted); }
+.eq .box { border-radius: 12px; padding: 18px 20px; } .eq .box h3 { font-size: 18px; margin-bottom: 8px; }
+.eq .a { background: var(--brand-pale); border: 1px solid #c4dcd2; } .eq .b { background: #11241e; color: #e8efec; } .eq .b h3 { color: #fff; } .eq .b .ticks li::before { background: var(--brand-mid); }
+.eq .c { background: var(--data-pale); border: 1.5px solid var(--data); } .eq .c h3 { color: var(--data); } .eq .c .ticks li::before { background: var(--data); }
+.hv .ph { aspect-ratio: 16/9; background: var(--brand-pale); display: flex; align-items: center; justify-content: center; } .hv .ph .ti { font-size: 72px; color: var(--brand); }
+.bag { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.bag .card { text-align: center; padding: 10px 12px; } .bag svg { width: 70%; }
+@media (max-width: 1000px) { .vrow, .fbrow, .bag { grid-template-columns: 1fr 1fr; } .vrow.seq { grid-template-columns: 1fr; } .vrow.seq .ar { transform: rotate(90deg); height: 22px; }
+  .eq { grid-template-columns: 1fr; } .dev { grid-template-columns: 1fr; } .dev .img img { margin: 0 auto; } .dev .side { padding: 10px 12px 14px; display: grid; gap: 8px; }
+  .co, .side.r .co { position: static; transform: none; border: 1px solid; border-radius: 8px; } }
+@media (max-width: 640px) { .vrow, .fbrow, .bag { grid-template-columns: 1fr; } }
+</style></head><body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="#top">C-Robotics</a>
+  <nav aria-label="章节">
+    <a href="#what">我们在做什么</a><a href="#teleop">全身遥操</a><a href="#force">力反馈设备</a><a href="#fit">为什么和天机</a><a href="#pilot">第一个试点</a><a href="#round">本轮融资</a>
+  </nav>
+</div></header>
+<main id="top">
+
+<section class="hero"><div class="wrap">
+  <div class="hero-g">
+    <div>
+      <p class="kicker">C-Robotics × 天机　合作交流</p>
+      <h1>把 Luna 接进客户每天都在跑的业务</h1>
+      <p class="lede">我们已经在 Luna 上跑通了全身遥操，也接通了三家美国客户的业务系统。接下来要进场：力控本体加上力反馈主端，做成更多的活，留下模型最需要的数据。</p>
+      <div class="cta"><a class="btn solid" href="#teleop"><i class="ti ti-player-play"></i>看全身遥操</a><a class="btn" href="#force"><i class="ti ti-hand-finger"></i>看力反馈的证据</a></div>
+    </div>
+    <figure class="tile vid"><video autoplay muted loop playsinline poster="media/wholebody.jpg"><source src="media/wholebody.mp4" type="video/mp4"></video><figcaption><b>一位操作员，一台 Luna，实时。</b>操作员探身伸手，Luna 降下腰、双臂跟着伸出去。</figcaption></figure>
+  </div>
+  <div class="facts">
+    <div class="fact"><b>4</b><span>家美国客户已签意向书</span></div>
+    <div class="fact"><b>3</b><span>家的业务系统已经接通</span></div>
+    <div class="fact"><b>2026.12 – 2027.1</b><span>首台机器人进客户现场的目标时间</span></div>
+    <div class="fact"><b>50–100 万美元</b><span>正在进行的 Pre-Seed 轮：主端设备、Luna 本体、高价值场景</span></div>
+  </div>
+</div></section>
+
+<section class="board wash" id="what"><div class="wrap">
+  <div class="head"><p class="kicker">我们在做什么</p><h2>交付整条工作流，Luna 是其中的一个工位</h2>
+    <p class="sub">从客户的任务出发：接通业务系统，设计整条流程，<b>遥操员先带着机器人开工</b>，再把验证过的任务交给模型。团队 7 人：3 位创始人，4 位硬件工程师。</p></div>
+  <div class="duo">
+    <figure class="tile vid" style="aspect-ratio:auto"><img src="media/site-factory-wide.jpg" style="aspect-ratio:16/9;height:auto" alt=""><span class="pin" style="left:39%;top:30%"><i class="ti ti-map-pin"></i>装箱工位：Luna 的位置</span><figcaption><b>一家食品工厂的现场。</b>现在由人工按单装箱。</figcaption></figure>
+    <figure class="vt" data-v="sim" ><video muted loop playsinline preload="none" poster="media/sim.jpg" data-src="media/sim.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>同一块场地的 1:1 规划模型</b>Luna 在装箱工位，上游是纸箱设备，下游是封箱、码垛和搬托盘的 AMR。加速播放，回放示例订单。</figcaption></figure>
+  </div>
+  <div class="stations">
+    <div class="stn"><i class="ti ti-box"></i><b>开箱</b><span>纸箱设备</span></div>
+    <div class="stn luna"><i class="ti ti-robot"></i><b>按单装箱</b><span>Luna，遥操先开工</span></div>
+    <div class="stn"><i class="ti ti-tag"></i><b>贴标封箱</b><span>封箱机</span></div>
+    <div class="stn"><i class="ti ti-stack-2"></i><b>码垛</b><span>工业臂</span></div>
+    <div class="stn"><i class="ti ti-forklift"></i><b>托盘搬运</b><span>AMR</span></div>
+  </div>
+  <div class="dispatch"><i class="ti ti-route" style="font-size:20px;color:var(--brand)"></i><span><b>C-Robotics 任务调度</b>　把每张订单变成各工位的任务，并跟踪完成情况</span><span class="sys"><span class="chip">ERP</span><span class="chip">订单</span><span class="chip">物料</span></span></div>
+  <div class="blk" style="margin-top:30px">
+    <div class="chevs">
+      <div class="chev c1"><div class="n"><i class="ti ti-plug-connected"></i>第 1 步</div><div class="t">接通业务系统</div></div>
+      <div class="chev c2"><div class="n"><i class="ti ti-layout-board-split"></i>第 2 步</div><div class="t">设计工位和流程</div></div>
+      <div class="chev c3"><div class="n"><i class="ti ti-device-gamepad-2"></i>第 3 步</div><div class="t">遥操先开工</div></div>
+      <div class="chev c4"><div class="n"><i class="ti ti-brain"></i>第 4 步</div><div class="t">模型逐项接手</div></div>
+      <div class="chev c5"><div class="n"><i class="ti ti-trending-up"></i>第 5 步</div><div class="t">运行和扩点</div></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="board" id="teleop"><div class="wrap">
+  <div class="head"><p class="kicker">能力一 · 全身遥操</p><h2>直觉的全身遥操：做得快，做得准，留下好数据</h2>
+    <p class="sub">人怎么动，Luna 就怎么动。加上力反馈和天机的力控臂，<b>遥操员驱动 Luna 干活又快又准，很少需要返工</b>。这样采下来的数据是好数据，模型学到的策略也才是好策略。</p></div>
+  <div class="vrow">
+    <figure class="vt" data-v="topcam" ><video muted loop playsinline preload="none" poster="media/topcam.jpg" data-src="media/topcam.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>全身遥操</b>样板间顶部摄像头，4 倍速。Luna 沿货架移动、转身、伸手取货。</figcaption></figure>
+    <figure class="vt" data-v="pickpack" ><video muted loop playsinline preload="none" poster="media/pickpack.jpg" data-src="media/pickpack.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>完整任务</b>样板间里从货架拣货、装袋、取小票，全程遥操作完成。</figcaption></figure>
+    <figure class="vt" data-v="forcefb" ><video muted loop playsinline preload="none" poster="media/forcefb.jpg" data-src="media/forcefb.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>柔性接触：刮玻璃</b>力控臂加力反馈：知道该用多大的力，并且一直保持这个力。刮板不会压坏，玻璃也不会被撞。</figcaption></figure>
+  </div>
+  <p class="note" style="margin-top:10px">视频循环播放，点开可以放大。</p>
+
+  <div class="blk">
+    <p class="lab">为什么快、为什么准</p>
+    <div class="three">
+      <div class="card"><i class="ti ti-user-scan ic"></i><h3>全身直觉映射</h3><p>操作员探身、转身、伸手，Luna 的底盘、腰、头和双臂跟着做同一个动作。不用想按键，上手快。</p></div>
+      <div class="card"><i class="ti ti-hand-finger ic"></i><h3>力反馈</h3><p>手上知道什么时候碰到了、现在用了多大的力。接触的那一下不用试探，一次到位。</p></div>
+      <div class="card"><i class="ti ti-adjustments-cog ic"></i><h3>力控臂</h3><p>天机的手臂在接触时顺着力走，不硬顶。刮、擦、插这类要一直保持接触的活，做得稳。</p></div>
+    </div>
+    <div class="chevs" style="grid-template-columns:repeat(4,1fr);margin-top:18px">
+      <div class="chev c1"><div class="n">遥操员</div><div class="t">做得快、做得准、很少返工</div></div>
+      <div class="chev c2"><div class="n">数据</div><div class="t">示范干净，没有多余的试探</div></div>
+      <div class="chev c3"><div class="n">策略</div><div class="t">学到的是干净利落的动作</div></div>
+      <div class="chev c4"><div class="n">模型</div><div class="t">价值更高，接手的任务更多</div></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="board wash" id="force"><div class="wrap">
+  <div class="head"><p class="kicker">能力二 · 力反馈设备</p><h2>我们的力反馈主端：它是什么，为什么好</h2>
+    <p class="sub">人拿起一个东西的瞬间，就知道它的形状、大小、软硬，该用多大的力，快滑了会马上握紧。<b>我们的主端把这些感觉传回远程操作员的手上。</b></p></div>
+
+  <div class="dev">
+    <div class="devcap">手持力反馈主端</div>
+    <div class="side l">
+      <div class="co y" style="top:16%"><b><i>1</i>头显快拆座</b>刚性连接，换电池不用重新标定</div>
+      <div class="co g" style="top:38.4%"><b><i>2</i>夹持力反馈电机</b>0–10 N 的双边夹持力，手上能感到夹得多紧</div>
+      <div class="co o" style="top:67.7%"><b><i>3</i>安全使能扳机</b>三段式，松手即停</div>
+      <div class="co d" style="top:88.1%"><b><i>4</i>单根复合线缆</b>供电和数据一根线，操作端不需要电脑主机</div>
+    </div>
+    <div class="img"><img src="media/cumi_device.jpg" alt="手持力反馈主端的结构图"></div>
+    <div class="side r">
+      <div class="co g" style="top:30.5%"><b><i>5</i>食指侧推摇杆</b>不用看就能操作底盘和菜单</div>
+      <div class="co c" style="top:64.8%"><b><i>6</i>拇指基准和双指尖机构</b>捏合时不拽手，指腹上装触觉显示</div>
+    </div>
+  </div>
+
+  <div class="fbrow">
+    <div class="fbc"><div class="ic" style="background:var(--info-pale);color:var(--info)"><i class="ti ti-arrows-move"></i></div><div><b>接触方向</b><span>指腹的皮肤沿受力方向被轻轻拉动，提示物体正在往哪边偏。</span></div></div>
+    <div class="fbc"><div class="ic" style="background:var(--amber-pale);color:var(--amber)"><i class="ti ti-arrows-diagonal-minimize-2"></i></div><div><b>夹持力度</b><span>夹爪上的夹持力变成手柄开合的阻力，手上能感到现在夹得有多紧。</span></div></div>
+    <div class="fbc"><div class="ic" style="background:var(--data-pale);color:var(--data)"><i class="ti ti-wave-sine"></i></div><div><b>瞬时接触</b><span>20–400 Hz 的短促振动，提示刚刚碰到了，或者开始打滑了。</span></div></div>
+  </div>
+
+  <div class="blk">
+    <p class="lab">为什么好 · 一：接触类的活做得成</p>
+    <div class="vrow">
+      <figure class="vt" data-v="posonly" ><video muted loop playsinline preload="none" poster="media/posonly.jpg" data-src="media/posonly.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>纯位置遥操</b>操作员感觉不到接触：刮板压弯，杯子被捏瘪。</figcaption></figure>
+      <figure class="vt" data-v="forcefb" ><video muted loop playsinline preload="none" poster="media/forcefb.jpg" data-src="media/forcefb.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>有力反馈</b>同样的擦玻璃，刮板贴住玻璃，一道刮净。</figcaption></figure>
+      <figure class="vt" data-v="latency" ><video muted loop playsinline preload="none" poster="media/latency.jpg" data-src="media/latency.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>有延迟时仍然稳</b>实验室演示：约 200 毫秒延迟下，在接触面上下压，力稳定跟随。</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="blk">
+    <p class="lab">为什么好 · 二：人的示范能教会策略</p>
+    <div class="vrow seq">
+      <figure class="vt" data-v="base" ><video muted loop playsinline preload="none" poster="media/base.jpg" data-src="media/base.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>原始策略</b>贴不住玻璃的上沿，留下没刮到的地方。</figcaption></figure>
+      <div class="ar"><i class="ti ti-arrow-right"></i></div>
+      <figure class="vt" data-v="correction" ><video muted loop playsinline preload="none" poster="media/correction.jpg" data-src="media/correction.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>人来示范</b>操作员带着力反馈，把刮板顶回上沿。</figcaption></figure>
+      <div class="ar"><i class="ti ti-arrow-right"></i></div>
+      <figure class="vt" data-v="learned" ><video muted loop playsinline preload="none" poster="media/learned.jpg" data-src="media/learned.mp4"></video><i class="ti ti-arrows-maximize zi"></i><figcaption><b>学习之后</b>学了这些示范，策略自己会往上顶。</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="blk two">
+    <div class="card"><i class="ti ti-hand-finger ic"></i><h3>对操作员：做得更快、更准</h3><p>手上有了接触的感觉，碰到东西的那一下就不用猜。动作更快、更准，过冲少，多余的试探也少。</p>
+      <div class="ev"><b>公开研究的结果。</b>Kota 等人 2026 年的论文里，两个策略在运行时看到的触觉输入相同，用带指尖反馈采集的示范训练出来的那一个，执行更快。</div></div>
+    <div class="card"><i class="ti ti-chart-dots-3 ic"></i><h3>对模型：接触本身被记了下来</h3><p>力和触觉信号、机器人做了什么、人怎么改的、物体最后怎么样，都在同一个时钟上。模型团队学接触类任务时缺的正是这些，而且它们来自真实的作业现场。</p></div>
+  </div>
+</div></section>
+
+<section class="board" id="fit"><div class="wrap">
+  <div class="head"><p class="kicker">为什么和天机协作</p><h2>力控本体加力反馈主端，正是模型厂商最需要的那种数据</h2>
+    <p class="sub">这套组合天然契合：<b>天机的力控双臂负责在接触时做出可控的动作，我们的主端让操作员知道什么时候该收力、加力或换个方向。</b>少了任何一边，上面的两个结果都出不来。</p></div>
+  <div class="eq">
+    <div class="box a"><h3>天机 · Luna 的力控双臂</h3><div style="display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center"><img src="media/luna.png" style="width:96px" alt=""><ul class="ticks"><li>七轴、关节级力控</li><li>接触时能做出可控的动作</li><li>腕部和夹爪能测到接触</li><li>轮式底盘和升降腰，够得着整个工位</li></ul></div></div>
+    <div class="op">+</div>
+    <div class="box b"><h3>C-Robotics · 全身遥操和力反馈主端</h3><ul class="ticks"><li>人的全身动作变成 Luna 的协调动作</li><li>接触方向、夹持力度、瞬时接触传回操作员的手</li><li>从端触觉夹爪按天机的法兰设计，直接安装</li><li>客户、工位和业务系统由我们带来</li></ul></div>
+    <div class="op">=</div>
+    <div class="box c"><h3>模型厂商要的数据</h3><ul class="ticks"><li>全身的：底盘、腰、双臂和夹爪一起</li><li>带接触的：力、触觉和人的纠正</li><li>真实的：来自客户每天在跑的工位</li><li>做得成的：自主策略今天进不去的活，遥操先做起来</li></ul></div>
+  </div>
+  <div class="blk two" style="align-items:center">
+    <div><h3 class="h3s">一个例子：拿稳软袋，又不夹坏</h3><p style="font-size:16px;color:#34413d">装箱时，双臂要把软袋送到位，操作员还要判断：夹稳了吗？该加力，还是该松一点？天机的双臂执行调整，我们的主端帮人判断该怎么调，这一次判断和结果一起被记录下来。</p></div>
+    <div class="bag">
+  <div class="card"><svg viewBox="0 0 120 70"><rect x="26" y="8" width="8" height="44" rx="3" fill="#5f6d68"/><rect x="86" y="8" width="8" height="44" rx="3" fill="#5f6d68"/><rect x="42" y="22" width="36" height="40" rx="9" fill="#f6f1e7" stroke="#b7791f" stroke-width="2"/><path d="M60 50v14m-5-5l5 6 5-6" fill="none" stroke="#b4432e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><b style="display:block">太松</b><span class="note">袋子往下滑</span></div>
+  <div class="card" style="border:2px solid var(--brand);background:#f3f8f6"><svg viewBox="0 0 120 70"><rect x="34" y="8" width="8" height="44" rx="3" fill="#1f6f5c"/><rect x="78" y="8" width="8" height="44" rx="3" fill="#1f6f5c"/><rect x="42" y="12" width="36" height="42" rx="9" fill="#f6f1e7" stroke="#b7791f" stroke-width="2"/><path d="M52 34l6 6 11-12" fill="none" stroke="#1f6f5c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><b style="display:block;color:var(--brand)">刚好</b><span class="note">拿稳，包装完好</span></div>
+  <div class="card"><svg viewBox="0 0 120 70"><rect x="42" y="8" width="8" height="44" rx="3" fill="#5f6d68"/><rect x="70" y="8" width="8" height="44" rx="3" fill="#5f6d68"/><path d="M50 14q-8 16 0 34q10 10 20 0q8-18 0-34q-10-6-20 0z" fill="#f6f1e7" stroke="#b7791f" stroke-width="2"/><path d="M18 30h14m-5-5l6 5-6 5M102 30H88m5-5l-6 5 6 5" fill="none" stroke="#b4432e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><b style="display:block">太紧</b><span class="note">把包装压坏</span></div>
+</div>
+  </div>
+  <div class="split" style="margin-top:26px">
+    <div class="col we"><h3><i class="ti ti-circle-check"></i>已有的真机基础</h3><ul><li>Luna 上的全身遥操</li><li>笔式主端在擦玻璃任务上的力反馈纠正</li></ul></div>
+    <div class="col you"><h3><i class="ti ti-flask"></i>想和天机一起验证</h3><ul><li>三路反馈的主端在软袋上的效果：重抓、破损和耗时</li><li>用它采的示范，能不能训出更好的策略</li></ul></div>
+  </div>
+</div></section>
+
+<section class="board wash" id="pilot"><div class="wrap">
+  <div class="head"><p class="kicker">第一个联合试点</p><h2>选一个抓取多的高价值场景，一起做第一个试点</h2>
+    <p class="sub">可以是食品厂装箱，可以是超市，也可以是我们正在谈的其他场景。同一台 Luna，同一批物品，一起验证两件事。</p></div>
+  <div class="split" style="margin-top:0">
+    <div class="card" style="border-top:4px solid var(--brand)"><p class="lab" style="color:var(--brand)">验证一</p><h3 style="font-size:19px;margin-bottom:8px">能稳定处理哪些物品</h3><ul class="ticks"><li>请客户挑出自主策略难以稳定处理的物品，比如软袋。</li><li>逐类看：遥操能否完成、每件耗时、重抓几次、有没有压坏。</li><li><b>结果：</b>哪几类可以交给 Luna，客户和天机都能自己判断。</li></ul></div>
+    <div class="card" style="border-top:4px solid var(--data)"><p class="lab" style="color:var(--data)">验证二</p><h3 style="font-size:19px;margin-bottom:8px">力反馈采到的示范，能不能训出更好的策略</h3><ul class="ticks"><li>同样的机器人、夹爪和视角，力反馈开、关各采一批。</li><li>先看多余的试探是否减少，同时保留「打滑后及时补握」这类有价值的纠正。</li><li><b>结果：</b>固定示范数量和训练预算，用没见过的物品测策略的成功率。</li></ul></div>
+  </div>
+  <div class="sup" style="margin-top:16px">
+    <div class="col we"><h3><i class="ti ti-building-factory-2"></i>C-Robotics 带来</h3><ul><li>客户、工位和整条流程</li><li>业务系统接入和任务调度</li><li>遥操团队和现场工程</li><li>力反馈主端和数据记录</li></ul></div>
+    <div class="col you"><h3><i class="ti ti-robot"></i>邀请天机带来</h3><ul><li>Luna 本体</li><li>接口支持</li><li>法兰和挂件的预留位</li><li>算力选配</li></ul></div>
+    <div class="card"><h3 style="display:flex;gap:9px;align-items:center;margin-bottom:8px"><i class="ti ti-gift" style="font-size:22px;color:var(--brand)"></i>天机能得到</h3><ul class="ticks"><li>一个可复用的美国客户工位方案</li><li>力控双臂在真实工位上的表现</li><li>哪些夹具和本体能力值得继续投入的现场依据</li></ul></div>
+  </div>
+</div></section>
+
+<section class="board" id="round"><div class="wrap">
+  <div class="head"><p class="kicker">本轮融资</p><h2>Pre-Seed 轮，50 万至 100 万美元</h2></div>
+  <p class="thesis" style="max-width:34em;font-size:26px;border-left:4px solid var(--brand);padding-left:20px;margin-bottom:34px">我们认为，只有大量进入不同的、多元的场景，本体的价值才会逐渐起来。</p>
+
+  <p class="lab">钱花在哪</p>
+  <div class="three">
+    <div class="card" style="border-top:4px solid var(--brand)"><i class="ti ti-hand-finger ic"></i><h3>我们的主端设备</h3><p>把力反馈主端做完、做成可以批量上工位的设备。</p></div>
+    <div class="card" style="border-top:4px solid var(--brand)"><i class="ti ti-robot ic"></i><h3>再采购一批 Luna 本体</h3><p>一部分进客户现场，一部分留在实验室做开发和回归测试。</p></div>
+    <div class="card" style="border-top:4px solid var(--brand)"><i class="ti ti-map-pin ic"></i><h3>部署高价值场景</h3><p>进场，做客户系统和现场设备的集成，把场景一个个跑起来。</p></div>
+  </div>
+
+  <div class="blk">
+    <p class="lab">已经有客户的场景</p>
+    <div class="three">
+      <figure class="tile vid" style="aspect-ratio:auto"><img src="media/site-factory-wide.jpg" style="aspect-ratio:16/9;height:auto" alt=""><figcaption><b>工厂</b>　食品工厂按单装箱</figcaption></figure>
+      <figure class="tile vid" style="aspect-ratio:auto"><img src="media/site-grocery.jpg" style="aspect-ratio:16/9;height:auto" alt=""><figcaption><b>超市</b>　货架旁的备货、补货和订单打包</figcaption></figure>
+      <figure class="tile vid" style="aspect-ratio:auto"><img src="media/site-restaurant.jpg" style="aspect-ratio:16/9;height:auto" alt=""><figcaption><b>餐饮</b>　后厨里的外卖打包</figcaption></figure>
+    </div>
+  </div>
+  <div class="blk" style="margin-top:28px">
+    <p class="lab">正在看的高价值场景</p>
+    <div class="three">
+      <figure class="tile vid" style="aspect-ratio:auto"><img src="media/scene-medical.jpg" style="aspect-ratio:16/9;height:auto" alt="药师从货架上取药"><figcaption><b>医疗健康</b>　需求明确、单次作业价值高</figcaption></figure>
+      <figure class="tile vid" style="aspect-ratio:auto"><img src="media/scene-construction.jpg" style="aspect-ratio:16/9;height:auto" alt="工地上的工人和钢筋"><figcaption><b>工地</b>　环境多变，人手紧缺</figcaption></figure>
+      <figure class="tile vid" style="aspect-ratio:auto"><img src="media/scene-lab.jpg" style="aspect-ratio:16/9;height:auto" alt="试管放进试管架"><figcaption><b>实验室</b>　高价值样本的精细抓取</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="take" style="margin-top:34px;grid-template-columns:1fr"><p style="font-family:var(--serif);font-size:23px;line-height:1.55;max-width:none">我们希望与天机一起完成首个试点，也欢迎天机以战略投资方身份参与本轮融资。</p></div>
+</div></section>
+</main>
+<div id="zoom" role="dialog"><button type="button">关闭</button><div class="zin"></div></div>
+<div id="lb" role="dialog"><button type="button">关闭</button><video controls loop playsinline></video></div>
+<footer><div class="wrap">C-Robotics · 与天机交流 · 2026.11　客户名称未列出。</div></footer>
+<script>
+const S={"t0":13,"dt":0.05,"f":[6.0,6.0,6.4,6.5,6.9,7.0,7.5,7.6,8.2,8.4,8.5,8.9,9.1,9.5,9.7,9.6,9.6,9.6,9.9,10.1,10.1,10.2,10.1,10.0,10.0,9.8,9.6,9.8,10.0,10.2,10.2,10.4,10.6,10.6,10.7,11.0,11.0,11.0,11.3,11.4,11.6,11.5,11.6,11.8,11.9,12.3,11.8,12.1,12.3,12.6,11.9,12.2,12.4,12.6,13.0,13.1,14.3,15.2,15.0,15.5,15.3,15.3,16.0,16.9,17.2,19.0,20.2,22.9,23.4,25.4,29.7,29.9,30.0,33.6,34.0,34.1,35.4,33.6,33.2,33.0,32.5,32.1,32.3,32.6,32.7,33.5,31.3,31.6,31.1,30.1,29.7,27.2,26.7,26.2,25.9,25.7,24.6,23.7,23.8,23.4,22.6,22.0,22.0,21.9,22.1,21.6,19.0,19.4,18.9,18.8,18.3,18.4,17.8,17.9,17.2,16.8,16.6,15.0,14.1,12.7,12.4,12.5,12.4,12.0,11.3,11.4,11.7,11.8,11.5,12.3,12.7,13.1,13.4,13.6,14.1,13.9,14.1,14.3,15.4,15.1,15.8,15.8,15.8,15.9,16.5,16.4,17.8,18.0,18.6,18.1,18.1,18.2,18.8,18.6,19.6,19.2,20.2,20.3,20.7,20.6,21.5,22.0,23.1,21.0,18.3,17.1,18.3,14.6,13.3,12.6,10.9,8.9,6.5,6.1,4.7,3.7,2.8,1.5,-0.3,-0.2,-0.2,-0.2,-0.2,-0.3,-0.3,-0.3,-0.1,-0.3,-0.4,-0.3,-0.3,-0.3,-0.3,-0.5,-0.2,-0.4,-0.3,-0.2,-0.6,-0.3,-0.4,-0.4,-0.3,-0.2,-0.5,-0.4,-0.4,-0.4,-0.4,-0.4,-0.3,-0.4,-0.3,-0.3,-0.3,-0.4,-0.3,-0.3,-0.4,-0.3,-0.4,-0.3,-0.3,-0.4,-0.4,-0.3,-0.3,-0.3,-0.3,-0.3,-0.3,-0.4,-0.4,-0.3,-0.3,-0.4,-0.3,-0.2,-0.4,-0.2,-0.3,-0.3,-0.2,-0.1,-0.4,-0.4,-0.4,-0.2,-0.0,-0.5,-0.2,-0.2,-0.2,-0.3,0.6,2.7,3.2,1.9,1.4,0.9,0.2,0.0,0.1,-0.1,-0.1,-0.2,-0.1,0.0,-0.1,0.2,-0.1,-0.0,-0.0,0.1,0.1,0.1,0.2,0.2,-0.0,-0.2,0.1,0.0,-0.0,0.1,-0.0,0.2,-0.0,0.0,0.0,0.1,0.0,0.1,0.0,0.0,0.2,0.2,-0.2,-0.1,0.2,0.1,0.1,0.1,0.0,0.1,0.1,0.1,0.1,0.1,1.5,2.3,3.9,4.9,6.2,7.9,9.3,10.5,11.9,12.8,13.7,13.0,13.5,13.8,13.4,13.0,12.6,12.1,11.6,10.6,9.3,9.1,10.7,10.2,10.5,10.8,10.8,12.3,12.4,12.9,13.2,13.0,13.2]};
+(function(){const svg=document.getElementById('chart');if(!svg)return;const NS='http://www.w3.org/2000/svg';
+const T0=14,T1=28,X0=44,X1=744,Y0=256,Y1=30,FM=40;const x=t=>X0+(t-T0)/(T1-T0)*(X1-X0),y=f=>Y0-Math.max(0,f)/FM*(Y0-Y1);
+const mk=(n,a,t,p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;(p||svg).appendChild(e);return e;};
+for(const f of[0,10,20,30,40]){mk('line',{x1:X0,x2:X1,y1:y(f),y2:y(f),stroke:f?'#e3e9e6':'#b9c4c0','stroke-width':1});mk('text',{x:X0-8,y:y(f)+4,'text-anchor':'end','font-size':11.5,fill:'#5f6d68'},f);}
+for(let t=14;t<=28;t+=2)mk('text',{x:x(t),y:Y0+18,'text-anchor':'middle','font-size':11.5,fill:'#5f6d68'},t+' 秒');
+mk('text',{x:X1,y:Y0+38,'text-anchor':'end','font-size':11,fill:'#5f6d68'},'从策略开始算起');
+const segs={A:[17.09,21.92],B:[25.98,26.72]},G={};
+for(const k in segs){const[a,b]=segs[k],cx=(x(a)+x(b))/2;const g=mk('g',{class:'seg',tabindex:0,role:'button'});mk('rect',{x:x(a),y:Y1-4,width:Math.max(x(b)-x(a),8),height:Y0-Y1+4,rx:3},null,g);mk('circle',{cx,cy:Y1-14,r:11,'stroke-width':1.5,stroke:'#6b4fb3'},null,g);mk('text',{x:cx,y:Y1-9.5,'text-anchor':'middle','font-size':12.5,'font-weight':800},k,g);G[k]=g;}
+mk('rect',{x:x(17.4),y:Y1-4,width:x(21.12)-x(17.4),height:9,fill:'#6b4fb3','pointer-events':'none'});
+let d='';S.f.forEach((f,i)=>{const t=S.t0+i*S.dt;if(t<T0||t>T1)return;d+=(d?'L':'M')+x(t).toFixed(1)+' '+y(f).toFixed(1);});
+mk('path',{d,fill:'none',stroke:'#1f6f5c','stroke-width':2.2,'stroke-linejoin':'round','pointer-events':'none'});
+const note=(t,f,l,dx,dy,an)=>{mk('circle',{cx:x(t),cy:y(f),r:4.5,fill:'#fff',stroke:'#6b4fb3','stroke-width':2,'pointer-events':'none'});mk('text',{x:x(t)+dx,y:y(f)+dy,'font-size':12,'font-weight':700,fill:'#4b3590','text-anchor':an,'pointer-events':'none',stroke:'#fff','stroke-width':3.5,'paint-order':'stroke','stroke-opacity':.85},l);};
+note(17.0,32.5,'拉动前 32.5 N',-10,4,'end');
+const i=S.f.findIndex((f,j)=>{const t=S.t0+j*S.dt;return t>17.4&&t<21&&Math.abs(f-11.2)<0.25;});note(S.t0+i*S.dt,11.2,'拉动中最低 11.2 N',0,24,'middle');
+const info={A:{vid:'wrist-A',lab:'腕部相机 · 纠正 A',ttl:'向外拉动时，刮板的压力降了下来',nums:[['32.5 N','拉动前'],['11.2 N','拉动中最低'],['3.7 秒','向外拉动']],ver:['keep','ti-circle-check','留作「减压」示范的候选'],why:'这个任务的目标，是在刮板不离开玻璃的前提下把过大的压力降下来。这一段向外拉动时，力降了下来，刮板一直贴着玻璃。',cav:'这一段里策略自身也后撤了约 6.9 毫米，所以力的下降不全算在操作员头上。'},
+B:{vid:'wrist-B',lab:'腕部相机 · 纠正 B',ttl:'同样按了键，刮板在空中',nums:[['0.8 秒','按住'],['0 %','这段时间里有接触的比例']],ver:['drop','ti-circle-x','不进接触控制的训练集'],why:'操作员按的是同一个键，但力一直接近零：刮板在空中。拿它当减压的示范，模型学不到任何和接触有关的东西。',cav:'这一段仍然留在回放里，只是不作为接触控制的训练样本。'}};
+function show(k){const o=info[k];document.querySelectorAll('.pick button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));for(const j in G){const on=j===k,g=G[j];g.querySelector('rect').setAttribute('fill',on?'#cfc4ee':'#ebe7f6');g.querySelector('circle').setAttribute('fill',on?'#6b4fb3':'#fff');g.querySelector('text').setAttribute('fill',on?'#fff':'#6b4fb3');}
+const v=document.getElementById('dvid');v.poster='media/'+o.vid+'.jpg';v.src='media/'+o.vid+'.mp4';const p=v.play();if(p)p.catch(()=>{});
+document.getElementById('dlab').textContent=o.lab;document.getElementById('dttl').textContent=o.ttl;document.getElementById('dnums').innerHTML=o.nums.map(n=>'<div><b>'+n[0]+'</b><span>'+n[1]+'</span></div>').join('');
+const ver=document.getElementById('dver');ver.className='verdict '+o.ver[0];ver.innerHTML='<i class="ti '+o.ver[1]+'"></i>'+o.ver[2];document.getElementById('dwhy').textContent=o.why;document.getElementById('dcav').textContent=o.cav;}
+document.querySelectorAll('.pick button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.k)));for(const k in G){G[k].addEventListener('click',()=>show(k));}show('A');})();
+// 小窗视频：进入视野才加载并循环播放，点开放大
+(function(){const lb=document.getElementById('lb'),lv=lb.querySelector('video');
+const io=new IntersectionObserver(es=>es.forEach(en=>{const v=en.target;if(en.isIntersecting){if(!v.src)v.src=v.dataset.src;const p=v.play();if(p)p.catch(()=>{});}else v.pause();}),{rootMargin:'120px'});
+document.querySelectorAll('.vt').forEach(f=>{const v=f.querySelector('video');io.observe(v);f.addEventListener('click',()=>{lv.src='media/'+f.dataset.v+'.mp4';lb.classList.add('on');const p=lv.play();if(p)p.catch(()=>{});});});
+const close=()=>{lb.classList.remove('on');lv.pause();lv.removeAttribute('src');lv.load();};lb.querySelector('button').addEventListener('click',close);lb.addEventListener('click',e=>{if(e.target===lb)close();});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});})();
+(function(){const z=document.getElementById('zoom'),zin=z.querySelector('.zin');document.querySelectorAll('.zoomable').forEach(el=>{const h=document.createElement('div');h.className='zhint';h.innerHTML='<i class="ti ti-zoom-in"></i>点图可放大';el.after(h);el.addEventListener('click',e=>{if(window.innerWidth>640||e.target.closest('.seg'))return;const c=el.cloneNode(true);c.removeAttribute('id');c.classList.remove('zoomable');zin.replaceChildren(c);z.classList.add('on');z.scrollLeft=0;z.scrollTop=0;});});const close=()=>z.classList.remove('on');z.querySelector('button').addEventListener('click',close);z.addEventListener('click',e=>{if(e.target===z)close();});})();
+const links=[...document.querySelectorAll('.bar nav a')];const io2=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id));}),{rootMargin:'-35% 0px -60% 0px'});document.querySelectorAll('section[id]').forEach(s=>io2.observe(s));
+</script></body></html>
